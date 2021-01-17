@@ -12,7 +12,7 @@ class ConnectionHandlerFactory : public QObject
 public:
     explicit ConnectionHandlerFactory(QObject *parent = nullptr);
 
-    ConnectionHandler* create(QTcpSocket* s);
+    virtual ConnectionHandler* create(QTcpSocket* s);
 
 };
 
@@ -38,6 +38,24 @@ public:
 protected:
     void echo();
 
+};
+
+class QProcess;
+class BashProxyConnectionHandler : public ConnectionHandler
+{
+    Q_OBJECT
+public:
+
+    class Factory : public ConnectionHandlerFactory
+    {
+    public:
+        ConnectionHandler* create(QTcpSocket* s) override;
+    };
+
+    explicit BashProxyConnectionHandler(QTcpSocket* s, QObject *parent = nullptr);
+
+protected:
+    QProcess * process = nullptr;
 };
 
 #endif // CONNECTIONHANDLER_H

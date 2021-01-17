@@ -22,7 +22,9 @@ public:
     void disconnectFromServer();
 
 private:
+    void clear();
     void send();
+    void appendReply();
 
     Ui::MainWindow *ui;
     QTcpSocket* client = nullptr;

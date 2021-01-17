@@ -60,16 +60,25 @@ int main(int argc, char *argv[])
 
     QCommandLineOption portOpt({"p", "port"}, "port", "port", "11001");
     QCommandLineOption udpOpt("udp", "use UDP instead of TCP");
+    QCommandLineOption typeOpt("type", "Type. values: echo, bash", "type", "echo");
     QCommandLineParser parser;
-    parser.addOptions({ portOpt, udpOpt });
+    parser.addOptions({ portOpt, udpOpt, typeOpt });
     parser.process(a);
     auto port = parser.value(portOpt).toUShort();
+    auto type = parser.value(typeOpt);
 
     registerSignalHandler();
 
-    qDebug() << "running on" << QThread::currentThreadId();
-    auto factory = ConnectionHandlerFactory();
-    auto server = Server(&factory, &a);
+    qDebug() << "running on" << QThread::currentThreadId() << "port" << port << "type" << type;
+
+    std::unique_ptr<ConnectionHandlerFactory> factory;
+    if (type == "bash") {
+        factory.reset(new BashProxyConnectionHandler::Factory);
+    } else {
+        factory.reset(new ConnectionHandlerFactory);
+    }
+
+    auto server = Server(factory.get(), &a);
     if (!server.open(port)) {
         qWarning() << "Unable to open server at port" << port << ". exiting...";
         return 1;

@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->connectButton, &QPushButton::clicked, this, &MainWindow::connectToServer);
     connect(ui->disconnectButton, &QPushButton::clicked, this, &MainWindow::disconnectFromServer);
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::send);
-    connect(ui->clearButton, &QPushButton::clicked, ui->inputTextEdit, &QPlainTextEdit::clear);
+    connect(ui->clearButton, &QPushButton::clicked, this, &MainWindow::clear);
     auto sendShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Return), ui->inputTextEdit, nullptr, nullptr, Qt::WidgetShortcut);
     connect(sendShortcut, &QShortcut::activated, this, &MainWindow::send);
 
@@ -44,7 +44,7 @@ void MainWindow::connectToServer()
 
     client = new QTcpSocket;
     connect(client, &QTcpSocket::errorOccurred, [this]() { statusBar()->showMessage(client->errorString()); });
-    connect(client, &QTcpSocket::readyRead, [this]() { ui->replyTextEdit->setPlainText(client->readAll()); });
+    connect(client, &QTcpSocket::readyRead, this, &MainWindow::appendReply);
     connect(client, &QTcpSocket::connected, [this, host, port]() {
         statusBar()->showMessage(QString("connected to %1:%2 ...").arg(host).arg(port));
     });
@@ -58,7 +58,14 @@ void MainWindow::disconnectFromServer()
         connect(client, &QTcpSocket::disconnected, client, &QObject::deleteLater);
         client = nullptr;
         statusBar()->showMessage("disconnected...");
+        clear();
     }
+}
+
+void MainWindow::clear()
+{
+    ui->inputTextEdit->clear();
+    ui->replyTextEdit->clear();
 }
 
 void MainWindow::send()
@@ -69,4 +76,10 @@ void MainWindow::send()
     ui->inputTextEdit->clear();
 
     client->write(data);
+}
+
+void MainWindow::appendReply()
+{
+    auto data = QString::fromUtf8(client->readAll());
+    ui->replyTextEdit->appendPlainText(data);
 }
