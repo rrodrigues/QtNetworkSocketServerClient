@@ -104,6 +104,7 @@ jobs:
         path: ${{runner.workspace}}/build/dist/server/server.app
 
     - name: Upload client
+      uses: actions/upload-artifact@v2
       with:
         name: client
         path: ${{runner.workspace}}/build/dist/client/client.app
