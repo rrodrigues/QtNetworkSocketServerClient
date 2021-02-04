@@ -95,7 +95,7 @@ jobs:
     - name: Install
       working-directory: ${{github.workspace}}/build
       shell: bash
-      run: cmake --install . --prefix installers
+      run: cmake --install . --prefix dist
 
     - name: Upload server
       uses: actions/upload-artifact@v2
