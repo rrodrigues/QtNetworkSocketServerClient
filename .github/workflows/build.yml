@@ -91,3 +91,19 @@ jobs:
       shell: bash
       # Execute the build.  You can specify a specific target with "--target <NAME>"
       run: cmake --build . --config $BUILD_TYPE
+
+    - name: Install
+      working-directory: ${{github.workspace}}/build
+      shell: bash
+      run: cmake --install . --prefix installers
+
+    - name: Upload server
+      uses: actions/upload-artifact@v2
+      with:
+        name: server
+        path: ${{runner.workspace}}/build/dist/server/server.app
+
+    - name: Upload client:
+      with:
+        name: client
+        path: ${{runner.workspace}}/build/dist/client/client.app
