@@ -101,10 +101,10 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: server
-        path: ${{github.workspace}}/build/dist/server/server.app
+        path: ${{github.workspace}}/build/dist/server/
 
     - name: Upload client
       uses: actions/upload-artifact@v2
       with:
         name: client
-        path: ${{github.workspace}}/build/dist/client/client.app
+        path: ${{github.workspace}}/build/dist/client/
