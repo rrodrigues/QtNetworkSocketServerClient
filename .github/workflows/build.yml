@@ -103,7 +103,7 @@ jobs:
         name: server
         path: ${{runner.workspace}}/build/dist/server/server.app
 
-    - name: Upload client:
+    - name: Upload client
       with:
         name: client
         path: ${{runner.workspace}}/build/dist/client/client.app
