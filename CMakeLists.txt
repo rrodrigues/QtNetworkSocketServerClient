@@ -20,3 +20,7 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Network REQUIRED)
 
 add_subdirectory(server)
 add_subdirectory(client)
+
+include(InstallRequiredSystemLibraries)
+set(CPACK_GENERATOR ZIP)
+include(CPack)

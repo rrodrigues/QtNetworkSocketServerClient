@@ -1,0 +1,7 @@
+// defined via target_compile_definitions
+// #define APP_VERSION_STR="${client_VERSION}"
+
+#define APP_VERSION_MAJOR @client_VERSION_MAJOR@
+#define APP_VERSION_MINOR @client_VERSION_MINOR@
+#define APP_VERSION_PATCH @client_VERSION_PATCH@
+

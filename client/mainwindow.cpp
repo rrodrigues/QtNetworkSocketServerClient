@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "config.h"
 
 #include <QAction>
 #include <QDebug>
@@ -14,6 +15,12 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowTitle(QString("client %1.%2.%3").arg(
+                               QString::number(APP_VERSION_MAJOR),
+                               QString::number(APP_VERSION_MINOR),
+                               QString::number(APP_VERSION_PATCH)
+                               )
+                   );
     connect(ui->connectButton, &QPushButton::clicked, this, &MainWindow::connectToServer);
     connect(ui->disconnectButton, &QPushButton::clicked, this, &MainWindow::disconnectFromServer);
     connect(ui->sendButton, &QPushButton::clicked, this, &MainWindow::send);
